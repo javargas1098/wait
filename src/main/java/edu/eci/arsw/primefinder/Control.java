@@ -54,8 +54,9 @@ public class Control extends Thread {
 		while (true) {
 			try {
 				for (int i = 0; i < NTHREADS; i++) {
+					syncronized(pft[i]){
 						pft[i].wait(TMILISECONDS / NTHREADS);
-						System.out.println(i + 1 + ":" + pft[i].getPrimes().size());
+						System.out.println(i + 1 + ":" + pft[i].getPrimes().size());}
 					
 				}
 				Scanner sc = new Scanner(System.in);
