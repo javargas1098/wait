@@ -5,6 +5,11 @@
  */
 package edu.eci.arsw.primefinder;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Scanner;
+
 /**
  *
  */
@@ -17,6 +22,7 @@ public class Control extends Thread {
 	private final int NDATA = MAXVALUE / NTHREADS;
 
 	private PrimeFinderThread pft[];
+	Scanner scanner = new Scanner(System.in);
 
 	private Control() {
 		super();
@@ -39,10 +45,28 @@ public class Control extends Thread {
 	@Override
 	public void run() {
 		for (int i = 0; i < NTHREADS; i++) {
-
 			pft[i].start();
-
 		}
+		parar();
+	}
+
+	synchronized public void parar() {
+		while (true) {
+			try {
+				for (int i = 0; i < NTHREADS; i++) {
+					synchronized (pft[i]) {
+						pft[i].wait(TMILISECONDS / NTHREADS);
+						System.out.println(i + 1 + ":" + pft[i].getPrimes().size());
+					}
+				}
+				Scanner sc = new Scanner(System.in);
+				sc.nextLine();
+				notifyAll();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+
 	}
 
 }

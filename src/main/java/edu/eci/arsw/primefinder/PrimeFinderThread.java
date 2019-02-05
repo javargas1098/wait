@@ -25,8 +25,9 @@ public class PrimeFinderThread extends Thread {
 			if (isPrime(i)) {
 
 				primes.add(i);
-				scanner.nextLine();
-				System.out.println(i);
+				
+//				System.out.println(i);
+//				scanner.nextLine();
 				// this.notifyAll();
 			}
 			// notify();
@@ -47,20 +48,8 @@ public class PrimeFinderThread extends Thread {
 
 		return ans;
 	}
-
 	public List<Integer> getPrimes() {
-		while (flag) {
-			try {
-				wait();
-			} catch (Exception e) {
-				// TODO: handle exception
-			}
-		}
-
-		notifyAll();
-
-		return primes;
-		//
-	}
+        return primes;
+    }
 
 }
