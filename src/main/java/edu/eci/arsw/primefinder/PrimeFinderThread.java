@@ -22,19 +22,35 @@ public class PrimeFinderThread extends Thread {
 	@Override
 	public void run() {
 		for (int i = a; i < b; i++) {
-			if (isPrime(i)) {
 
-				primes.add(i);
-				
-//				System.out.println(i);
-//				scanner.nextLine();
-				// this.notifyAll();
+			if (Control.flag == true) {
+				if (isPrime(i)) {
+
+					primes.add(i);
+
+//					System.out.println(i);
+//						scanner.nextLine();
+					// this.notifyAll();
+				}
+				// notify();
+			} else {
+				try {
+					synchronized (Control.flag) {
+						while (Control.flag == false) {
+							Control.flag.wait();
+							continue;
+						}
+					}
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
-			// notify();
+
 		}
 	}
 
-	synchronized boolean isPrime(int n) {
+	public boolean isPrime(int n) {
 		boolean ans;
 
 		if (n > 2) {
@@ -48,8 +64,9 @@ public class PrimeFinderThread extends Thread {
 
 		return ans;
 	}
+
 	public List<Integer> getPrimes() {
-        return primes;
-    }
+		return primes;
+	}
 
 }

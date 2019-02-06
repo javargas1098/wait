@@ -18,6 +18,8 @@ public class Control extends Thread {
 	private final static int NTHREADS = 3;
 	private final static int MAXVALUE = 30000000;
 	private final static int TMILISECONDS = 5000;
+	public static Boolean flag = true;
+	private static int primesFound = 0;
 
 	private final int NDATA = MAXVALUE / NTHREADS;
 
@@ -47,26 +49,32 @@ public class Control extends Thread {
 		for (int i = 0; i < NTHREADS; i++) {
 			pft[i].start();
 		}
-		parar();
-	}
-
-	synchronized public void parar() {
 		while (true) {
 			try {
+				Thread.sleep(1000);
+				Control.flag = false;
 				for (int i = 0; i < NTHREADS; i++) {
-					syncronized(pft[i]){
-						pft[i].wait(TMILISECONDS / NTHREADS);
-						System.out.println(i + 1 + ":" + pft[i].getPrimes().size());}
+//					Control.flag.wait();
 					
+					System.out.println(i + 1 + ":" + pft[i].getPrimes().size());
+					
+
 				}
 				Scanner sc = new Scanner(System.in);
 				sc.nextLine();
-				notifyAll();
+				synchronized (Control.flag) {
+					Control.flag.notifyAll();
+
+				}
+
 			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}
 
+		}
 	}
+
+
 
 }
